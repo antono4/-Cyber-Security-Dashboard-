@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberShield - Security Operations Center</title>
+    <title>CyberShield Pro - Advanced Security Operations Center</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -18,6 +18,7 @@
             --accent-orange: #ff8c42;
             --accent-red: #ff3366;
             --accent-purple: #a855f7;
+            --accent-pink: #ff6b9d;
             --text-primary: #e2e8f0;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
@@ -27,13 +28,448 @@
             --glow-red: 0 0 20px rgba(255, 51, 102, 0.3);
         }
 
+        /* Attack Type Cards */
+        .attack-type-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .attack-type-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .attack-type-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-cyan);
+        }
+
+        .attack-type-card.active {
+            border-color: var(--accent-cyan);
+            box-shadow: var(--glow-cyan);
+        }
+
+        .attack-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .attack-type-card.ddos::before { background: var(--accent-red); }
+        .attack-type-card.sql::before { background: var(--accent-yellow); }
+        .attack-type-card.xss::before { background: var(--accent-orange); }
+        .attack-type-card.phishing::before { background: var(--accent-purple); }
+        .attack-type-card.malware::before { background: var(--accent-pink); }
+        .attack-type-card.ransomware::before { background: var(--accent-red); }
+        .attack-type-card.bruteforce::before { background: var(--accent-yellow); }
+        .attack-type-card.mitm::before { background: var(--accent-cyan); }
+        .attack-type-card.dos::before { background: var(--accent-orange); }
+        .attack-type-card.蠕虫::before { background: var(--accent-red); }
+        .attack-type-card.trojan::before { background: var(--accent-purple); }
+        .attack-type-card.rootkit::before { background: var(--accent-red); }
+
+        .attack-type-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .attack-type-card.ddos .attack-type-icon { color: var(--accent-red); }
+        .attack-type-card.sql .attack-type-icon { color: var(--accent-yellow); }
+        .attack-type-card.xss .attack-type-icon { color: var(--accent-orange); }
+        .attack-type-card.phishing .attack-type-icon { color: var(--accent-purple); }
+        .attack-type-card.malware .attack-type-icon { color: var(--accent-pink); }
+        .attack-type-card.ransomware .attack-type-icon { color: var(--accent-red); }
+        .attack-type-card.bruteforce .attack-type-icon { color: var(--accent-yellow); }
+        .attack-type-card.mitm .attack-type-icon { color: var(--accent-cyan); }
+        .attack-type-card.dos .attack-type-icon { color: var(--accent-orange); }
+        .attack-type-card.蠕虫 .attack-type-icon { color: var(--accent-red); }
+        .attack-type-card.trojan .attack-type-icon { color: var(--accent-purple); }
+        .attack-type-card.rootkit .attack-type-icon { color: var(--accent-red); }
+
+        .attack-type-name {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .attack-type-count {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .attack-type-card.ddos .attack-type-count { color: var(--accent-red); }
+        .attack-type-card.sql .attack-type-count { color: var(--accent-yellow); }
+        .attack-type-card.xss .attack-type-count { color: var(--accent-orange); }
+        .attack-type-card.phishing .attack-type-count { color: var(--accent-purple); }
+        .attack-type-card.malware .attack-type-count { color: var(--accent-pink); }
+        .attack-type-card.ransomware .attack-type-count { color: var(--accent-red); }
+        .attack-type-card.bruteforce .attack-type-count { color: var(--accent-yellow); }
+        .attack-type-card.mitm .attack-type-count { color: var(--accent-cyan); }
+        .attack-type-card.dos .attack-type-count { color: var(--accent-orange); }
+        .attack-type-card.蠕虫 .attack-type-count { color: var(--accent-red); }
+        .attack-type-card.trojan .attack-type-count { color: var(--accent-purple); }
+        .attack-type-card.rootkit .attack-type-count { color: var(--accent-red); }
+
+        /* Attack Traffic Gauge */
+        .traffic-gauge-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+
+        .traffic-gauge {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+
+        .traffic-gauge svg {
+            transform: rotate(-90deg);
+        }
+
+        .traffic-gauge circle {
+            fill: none;
+            stroke-width: 12;
+        }
+
+        .traffic-gauge .bg {
+            stroke: var(--bg-card);
+        }
+
+        .traffic-gauge .fill {
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .traffic-gauge.inbound .fill { stroke: var(--accent-red); }
+        .traffic-gauge.outbound .fill { stroke: var(--accent-green); }
+        .traffic-gauge.blocked .fill { stroke: var(--accent-yellow); }
+
+        .traffic-gauge-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .traffic-gauge-value .number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .traffic-gauge.inbound .number { color: var(--accent-red); }
+        .traffic-gauge.outbound .number { color: var(--accent-green); }
+        .traffic-gauge.blocked .number { color: var(--accent-yellow); }
+
+        .traffic-gauge-value .label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Network Topology */
+        .network-topology {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            min-height: 200px;
+        }
+
+        .network-node {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2;
+        }
+
+        .network-node:hover {
+            transform: scale(1.2);
+        }
+
+        .network-node.server {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            box-shadow: var(--glow-cyan);
+        }
+
+        .network-node.firewall {
+            background: linear-gradient(135deg, var(--accent-yellow), var(--accent-orange));
+            box-shadow: 0 0 15px rgba(255, 217, 61, 0.4);
+        }
+
+        .network-node.router {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+            box-shadow: var(--glow-green);
+        }
+
+        .network-node.attacker {
+            background: var(--accent-red);
+            box-shadow: var(--glow-red);
+            animation: attackerPulse 1s infinite;
+        }
+
+        @keyframes attackerPulse {
+            0%, 100% { box-shadow: 0 0 10px var(--accent-red); }
+            50% { box-shadow: 0 0 30px var(--accent-red), 0 0 50px var(--accent-red); }
+        }
+
+        .network-node.compromised {
+            background: var(--accent-red);
+            animation: compromisedBlink 0.5s infinite;
+        }
+
+        @keyframes compromisedBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .network-connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            transform-origin: left center;
+            z-index: 1;
+        }
+
+        .network-connection.danger {
+            background: linear-gradient(90deg, transparent, var(--accent-red), transparent);
+            animation: dangerPulse 1s infinite;
+        }
+
+        @keyframes dangerPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Attack Timeline */
+        .attack-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .attack-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-cyan), var(--accent-red), var(--accent-yellow));
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--accent-cyan);
+        }
+
+        .timeline-item.critical { border-left-color: var(--accent-red); }
+        .timeline-item.warning { border-left-color: var(--accent-yellow); }
+        .timeline-item.info { border-left-color: var(--accent-green); }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 16px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+        }
+
+        .timeline-item.critical::before { background: var(--accent-red); }
+        .timeline-item.warning::before { background: var(--accent-yellow); }
+        .timeline-item.info::before { background: var(--accent-green); }
+
+        .timeline-time {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .timeline-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px 0;
+        }
+
+        .timeline-detail {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Port Monitor */
+        .port-monitor {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+        }
+
+        .port-indicator {
+            padding: 8px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .port-indicator.safe { border: 1px solid var(--accent-green); color: var(--accent-green); }
+        .port-indicator.warning { border: 1px solid var(--accent-yellow); color: var(--accent-yellow); }
+        .port-indicator.danger { border: 1px solid var(--accent-red); color: var(--accent-red); animation: dangerBlink 0.5s infinite; }
+
+        @keyframes dangerBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .port-number {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+        }
+
+        /* System Status */
+        .system-status {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .status-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .status-icon.secure { background: rgba(0, 255, 136, 0.15); color: var(--accent-green); }
+        .status-icon.warning { background: rgba(255, 217, 61, 0.15); color: var(--accent-yellow); }
+        .status-icon.danger { background: rgba(255, 51, 102, 0.15); color: var(--accent-red); }
+
+        .status-info {
+            flex: 1;
+        }
+
+        .status-name {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-value {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-indicator.online { background: var(--accent-green); }
+        .status-indicator.warning { background: var(--accent-yellow); }
+        .status-indicator.offline { background: var(--accent-red); }
+
+        /* Live Feed */
+        .live-feed {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .feed-item {
+            display: flex;
+            gap: 12px;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+        }
+
+        .feed-time {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .feed-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .feed-icon.attack { background: rgba(255, 51, 102, 0.15); color: var(--accent-red); }
+        .feed-icon.blocked { background: rgba(0, 255, 136, 0.15); color: var(--accent-green); }
+        .feed-icon.alert { background: rgba(255, 217, 61, 0.15); color: var(--accent-yellow); }
+        .feed-icon.scan { background: rgba(0, 245, 255, 0.15); color: var(--accent-cyan); }
+
+        .feed-content {
+            flex: 1;
+        }
+
+        .feed-type {
+            font-weight: 600;
+        }
+
+        .feed-detail {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
         /* AI Panel Styles */
         .ai-panel {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 400px;
-            height: 550px;
+            width: 480px;
+            height: 600px;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 16px;
@@ -50,7 +486,7 @@
 
         .ai-header {
             padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(0, 245, 255, 0.1));
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(0, 245, 255, 0.2));
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
@@ -64,20 +500,37 @@
         }
 
         .ai-avatar {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 20px;
             animation: aiPulse 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .ai-avatar::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            animation: aiGlow 2s ease-in-out infinite;
+            z-index: -1;
         }
 
         @keyframes aiPulse {
             0%, 100% { box-shadow: 0 0 10px var(--accent-purple); }
             50% { box-shadow: 0 0 25px var(--accent-purple), 0 0 40px var(--accent-cyan); }
+        }
+
+        @keyframes aiGlow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 0; }
         }
 
         .ai-name {
@@ -129,11 +582,11 @@
         }
 
         .ai-message {
-            max-width: 85%;
-            padding: 12px 16px;
+            max-width: 90%;
+            padding: 14px 18px;
             border-radius: 16px;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
             animation: messageSlide 0.3s ease;
         }
 
@@ -143,8 +596,8 @@
         }
 
         .ai-message.ai {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(0, 245, 255, 0.05));
+            border: 1px solid rgba(168, 85, 247, 0.3);
             align-self: flex-start;
             border-bottom-left-radius: 4px;
         }
@@ -159,16 +612,19 @@
         .ai-message .sender {
             font-size: 10px;
             font-weight: 600;
-            margin-bottom: 4px;
-            opacity: 0.7;
+            margin-bottom: 6px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .ai-typing {
             display: flex;
             gap: 4px;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(0, 245, 255, 0.05));
+            border: 1px solid rgba(168, 85, 247, 0.3);
             border-radius: 16px;
             align-self: flex-start;
             border-bottom-left-radius: 4px;
@@ -194,6 +650,45 @@
         .ai-footer {
             padding: 12px;
             border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+        }
+
+        .ai-quick-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .ai-quick-btn {
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ai-quick-btn:hover {
+            background: rgba(0, 245, 255, 0.1);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .ai-quick-btn.active-defense {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .ai-input-container {
             display: flex;
             gap: 8px;
         }
@@ -226,6 +721,9 @@
             cursor: pointer;
             font-size: 18px;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .ai-send:hover {
@@ -237,16 +735,16 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
             border: none;
             border-radius: 50%;
             color: white;
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
             z-index: 1999;
-            box-shadow: 0 5px 30px rgba(168, 85, 247, 0.4);
+            box-shadow: 0 5px 30px rgba(168, 85, 247, 0.5);
             transition: all 0.3s;
             display: flex;
             align-items: center;
@@ -255,7 +753,7 @@
 
         .ai-trigger:hover {
             transform: scale(1.1);
-            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.6);
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.7);
         }
 
         .ai-trigger.active {
@@ -278,35 +776,131 @@
             100% { transform: scale(1.5); opacity: 0; }
         }
 
+        .ai-notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: badgePulse 1s infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
         .ai-capabilities {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin-top: 8px;
         }
 
         .ai-capability {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            padding: 6px 10px;
+            gap: 4px;
+            font-size: 10px;
+            padding: 8px 6px;
             background: rgba(0, 245, 255, 0.1);
-            border-radius: 6px;
+            border-radius: 8px;
             color: var(--accent-cyan);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ai-capability:hover {
+            background: rgba(0, 245, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .ai-capability i {
-            font-size: 10px;
+            font-size: 16px;
+        }
+
+        /* AI Defense Mode Indicator */
+        .ai-defense-active {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 245, 255, 0.1));
+            border: 1px solid var(--accent-green);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 1500;
+            animation: defenseSlide 0.5s ease;
+        }
+
+        .ai-defense-active.show {
+            display: flex;
+        }
+
+        @keyframes defenseSlide {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .defense-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            animation: shieldRotate 3s linear infinite;
+        }
+
+        @keyframes shieldRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .defense-info {
+            flex: 1;
+        }
+
+        .defense-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .defense-status {
+            font-size: 11px;
+            color: var(--text-secondary);
         }
 
         /* AI Analysis Cards */
         .ai-analysis-card {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(0, 245, 255, 0.05));
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(0, 245, 255, 0.05));
             border: 1px solid var(--accent-purple);
             border-radius: 12px;
             padding: 16px;
             margin-top: 12px;
+        }
+
+        .ai-analysis-card.threat {
+            border-color: var(--accent-red);
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.15), rgba(255, 217, 61, 0.05));
+        }
+
+        .ai-analysis-card.defense {
+            border-color: var(--accent-green);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 245, 255, 0.05));
         }
 
         .ai-analysis-title {
@@ -319,10 +913,22 @@
             gap: 6px;
         }
 
+        .ai-analysis-card.threat .ai-analysis-title { color: var(--accent-red); }
+        .ai-analysis-card.defense .ai-analysis-title { color: var(--accent-green); }
+
         .ai-analysis-content {
             font-size: 12px;
             color: var(--text-secondary);
             line-height: 1.6;
+        }
+
+        .ai-analysis-content ul {
+            margin: 8px 0;
+            padding-left: 18px;
+        }
+
+        .ai-analysis-content li {
+            margin: 4px 0;
         }
 
         .ai-confidence {
@@ -351,6 +957,67 @@
             font-size: 11px;
             color: var(--accent-green);
             font-weight: 600;
+        }
+
+        /* Attack Mitigation Actions */
+        .mitigation-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .mitigation-btn {
+            padding: 8px 14px;
+            border: 1px solid;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+        }
+
+        .mitigation-btn.block {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        .mitigation-btn.block:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .mitigation-btn.isolate {
+            border-color: var(--accent-yellow);
+            color: var(--accent-yellow);
+        }
+
+        .mitigation-btn.isolate:hover {
+            background: var(--accent-yellow);
+            color: var(--bg-primary);
+        }
+
+        .mitigation-btn.alert {
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+        }
+
+        .mitigation-btn.alert:hover {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        .mitigation-btn.analyze {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .mitigation-btn.analyze:hover {
+            background: var(--accent-cyan);
+            color: var(--bg-primary);
         }
 
         * {
@@ -1336,14 +2003,81 @@
             <div class="stat-card col-3">
                 <div class="stat-header">
                     <div class="stat-icon cyan">
-                        <i class="fas fa-clock"></i>
+                        <i class="fas fa-shield-alt"></i>
                     </div>
-                    <div class="stat-trend up">
-                        <i class="fas fa-arrow-up"></i> 5%
+                    <div class="stat-trend down">
+                        <i class="fas fa-arrow-down"></i> 15%
                     </div>
                 </div>
-                <div class="stat-value" style="color: var(--accent-purple);">94.2%</div>
-                <div class="stat-label">MTTR (hours)</div>
+                <div class="stat-value" style="color: var(--accent-green);">12.4K</div>
+                <div class="stat-label">Attacks Blocked</div>
+            </div>
+
+            <!-- Attack Types Row -->
+            <div class="col-12">
+                <h3 class="section-title">CYBER ATTACK TYPES</h3>
+                <div class="attack-type-grid">
+                    <div class="attack-type-card ddos" onclick="selectAttackType('ddos')">
+                        <div class="attack-type-icon"><i class="fas fa-server"></i></div>
+                        <div class="attack-type-name">DDoS</div>
+                        <div class="attack-type-count" id="ddos-count">89</div>
+                    </div>
+                    <div class="attack-type-card sql" onclick="selectAttackType('sql')">
+                        <div class="attack-type-icon"><i class="fas fa-database"></i></div>
+                        <div class="attack-type-name">SQL Injection</div>
+                        <div class="attack-type-count" id="sql-count">156</div>
+                    </div>
+                    <div class="attack-type-card xss" onclick="selectAttackType('xss')">
+                        <div class="attack-type-icon"><i class="fas fa-code"></i></div>
+                        <div class="attack-type-name">XSS</div>
+                        <div class="attack-type-count" id="xss-count">234</div>
+                    </div>
+                    <div class="attack-type-card phishing" onclick="selectAttackType('phishing')">
+                        <div class="attack-type-icon"><i class="fas fa-fish"></i></div>
+                        <div class="attack-type-name">Phishing</div>
+                        <div class="attack-type-count" id="phishing-count">567</div>
+                    </div>
+                    <div class="attack-type-card malware" onclick="selectAttackType('malware')">
+                        <div class="attack-type-icon"><i class="fas fa-virus"></i></div>
+                        <div class="attack-type-name">Malware</div>
+                        <div class="attack-type-count" id="malware-count">78</div>
+                    </div>
+                    <div class="attack-type-card ransomware" onclick="selectAttackType('ransomware')">
+                        <div class="attack-type-icon"><i class="fas fa-lock"></i></div>
+                        <div class="attack-type-name">Ransomware</div>
+                        <div class="attack-type-count" id="ransomware-count">23</div>
+                    </div>
+                    <div class="attack-type-card bruteforce" onclick="selectAttackType('bruteforce')">
+                        <div class="attack-type-icon"><i class="fas fa-key"></i></div>
+                        <div class="attack-type-name">Brute Force</div>
+                        <div class="attack-type-count" id="bruteforce-count">445</div>
+                    </div>
+                    <div class="attack-type-card mitm" onclick="selectAttackType('mitm')">
+                        <div class="attack-type-icon"><i class="fas fa-user-secret"></i></div>
+                        <div class="attack-type-name">MITM</div>
+                        <div class="attack-type-count" id="mitm-count">34</div>
+                    </div>
+                    <div class="attack-type-card dos" onclick="selectAttackType('dos')">
+                        <div class="attack-type-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="attack-type-name">DoS</div>
+                        <div class="attack-type-count" id="dos-count">67</div>
+                    </div>
+                    <div class="attack-type-card trojan" onclick="selectAttackType('trojan')">
+                        <div class="attack-type-icon"><i class="fas fa-horse"></i></div>
+                        <div class="attack-type-name">Trojan</div>
+                        <div class="attack-type-count" id="trojan-count">45</div>
+                    </div>
+                    <div class="attack-type-card rootkit" onclick="selectAttackType('rootkit')">
+                        <div class="attack-type-icon"><i class="fas fa-cog"></i></div>
+                        <div class="attack-type-name">Rootkit</div>
+                        <div class="attack-type-count" id="rootkit-count">12</div>
+                    </div>
+                    <div class="attack-type-card" style="background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(168, 85, 247, 0.1)); border-color: var(--accent-cyan);" onclick="selectAttackType('other')">
+                        <div class="attack-type-icon" style="color: var(--accent-cyan);"><i class="fas fa-shield-virus"></i></div>
+                        <div class="attack-type-name">Others</div>
+                        <div class="attack-type-count" style="color: var(--accent-cyan);">892</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Threat Distribution Chart -->
@@ -1734,22 +2468,34 @@
         </div>
     </main>
 
+    <!-- AI Defense Mode Indicator -->
+    <div class="ai-defense-active" id="defenseIndicator">
+        <div class="defense-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="defense-info">
+            <div class="defense-title">AI DEFENSE ACTIVE</div>
+            <div class="defense-status" id="defenseStatus">Monitoring all attack vectors...</div>
+        </div>
+    </div>
+
     <!-- AI Assistant Panel -->
     <button class="ai-trigger" id="aiTrigger" onclick="toggleAIPanel()">
         <i class="fas fa-robot"></i>
+        <span class="ai-notification-badge" id="aiBadge">3</span>
     </button>
 
     <div class="ai-panel" id="aiPanel">
         <div class="ai-header">
             <div class="ai-title">
                 <div class="ai-avatar">
-                    <i class="fas fa-shield-halved"></i>
+                    <i class="fas fa-brain"></i>
                 </div>
                 <div>
-                    <div class="ai-name">CyberAI Analyst</div>
+                    <div class="ai-name">CyberAI Defense</div>
                     <div class="ai-status">
                         <div class="ai-status-dot"></div>
-                        <span>Autonomous Mode</span>
+                        <span id="aiModeStatus">Active Defense</span>
                     </div>
                 </div>
             </div>
@@ -1759,23 +2505,39 @@
         </div>
         <div class="ai-body" id="aiBody">
             <div class="ai-message ai">
-                <div class="sender">CyberAI</div>
-                <div>Hello! I'm your autonomous AI security analyst. I can help you with:</div>
+                <div class="sender"><i class="fas fa-robot"></i> CyberAI Defense</div>
+                <div>🛡️ <strong>AI-Powered Cyber Defense System</strong><br><br>I'm your autonomous AI security analyst trained to handle all types of cyber attacks. I can:</div>
                 <div class="ai-capabilities">
-                    <div class="ai-capability"><i class="fas fa-search"></i> Threat Analysis</div>
-                    <div class="ai-capability"><i class="fas fa-brain"></i> Risk Assessment</div>
-                    <div class="ai-capability"><i class="fas fa-lightbulb"></i> Recommendations</div>
-                    <div class="ai-capability"><i class="fas fa-chart-line"></i> Trend Prediction</div>
-                    <div class="ai-capability"><i class="fas fa-bolt"></i> Auto Response</div>
-                    <div class="ai-capability"><i class="fas fa-search-plus"></i> Deep Analysis</div>
+                    <div class="ai-capability" onclick="quickAction('ddos')"><i class="fas fa-server"></i><span>DDoS</span></div>
+                    <div class="ai-capability" onclick="quickAction('sql')"><i class="fas fa-database"></i><span>SQL Inj</span></div>
+                    <div class="ai-capability" onclick="quickAction('xss')"><i class="fas fa-code"></i><span>XSS</span></div>
+                    <div class="ai-capability" onclick="quickAction('phishing')"><i class="fas fa-fish"></i><span>Phishing</span></div>
+                    <div class="ai-capability" onclick="quickAction('malware')"><i class="fas fa-virus"></i><span>Malware</span></div>
+                    <div class="ai-capability" onclick="quickAction('ransomware')"><i class="fas fa-lock"></i><span>Ransomware</span></div>
                 </div>
             </div>
         </div>
         <div class="ai-footer">
-            <input type="text" class="ai-input" id="aiInput" placeholder="Ask me about security threats..." onkeypress="handleAIEnter(event)">
-            <button class="ai-send" onclick="sendAIMessage()">
-                <i class="fas fa-paper-plane"></i>
-            </button>
+            <div class="ai-quick-actions">
+                <button class="ai-quick-btn" onclick="activateDefense()">
+                    <i class="fas fa-shield-alt"></i> Activate Defense
+                </button>
+                <button class="ai-quick-btn" onclick="quickAction('analyze')">
+                    <i class="fas fa-search"></i> Analyze Threats
+                </button>
+                <button class="ai-quick-btn" onclick="quickAction('block')">
+                    <i class="fas fa-ban"></i> Block All
+                </button>
+                <button class="ai-quick-btn" onclick="quickAction('isolate')">
+                    <i class="fas fa-plug"></i> Isolate
+                </button>
+            </div>
+            <div class="ai-input-container">
+                <input type="text" class="ai-input" id="aiInput" placeholder="Ask AI to handle attacks..." onkeypress="handleAIEnter(event)">
+                <button class="ai-send" onclick="sendAIMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1823,15 +2585,19 @@
 
         // AI Panel Functions
         let aiPanelOpen = false;
+        let defenseActive = false;
+        let notificationCount = 3;
 
         function toggleAIPanel() {
             aiPanelOpen = !aiPanelOpen;
             const panel = document.getElementById('aiPanel');
             const trigger = document.getElementById('aiTrigger');
+            const badge = document.getElementById('aiBadge');
             
             if (aiPanelOpen) {
                 panel.classList.add('active');
                 trigger.classList.add('active');
+                if (badge) badge.style.display = 'none';
             } else {
                 panel.classList.remove('active');
                 trigger.classList.remove('active');
@@ -1844,11 +2610,11 @@
             }
         }
 
-        function addAIMessage(content, isUser = false) {
+        function addAIMessage(content, isUser = false, cardType = '') {
             const body = document.getElementById('aiBody');
             const message = document.createElement('div');
             message.className = `ai-message ${isUser ? 'user' : 'ai'}`;
-            message.innerHTML = `<div class="sender">${isUser ? 'You' : 'CyberAI'}</div><div>${content}</div>`;
+            message.innerHTML = `<div class="sender">${isUser ? '<i class="fas fa-user"></i> You' : '<i class="fas fa-robot"></i> CyberAI'}</div><div>${content}</div>`;
             body.appendChild(message);
             body.scrollTop = body.scrollHeight;
         }
@@ -1868,6 +2634,43 @@
             if (typing) typing.remove();
         }
 
+        function quickAction(action) {
+            const input = document.getElementById('aiInput');
+            input.value = action;
+            sendAIMessage();
+        }
+
+        function activateDefense() {
+            defenseActive = true;
+            const indicator = document.getElementById('defenseIndicator');
+            const status = document.getElementById('defenseStatus');
+            const modeStatus = document.getElementById('aiModeStatus');
+            
+            if (indicator) {
+                indicator.classList.add('show');
+            }
+            if (status) {
+                status.textContent = 'All defense systems activated!';
+            }
+            if (modeStatus) {
+                modeStatus.textContent = 'Defense Active';
+            }
+            
+            addAIMessage('🛡️ <strong>AI Defense Mode Activated!</strong><br><br>' +
+                'Defense systems are now fully operational:<br>' +
+                '✓ DDoS protection enabled<br>' +
+                '✓ SQL injection prevention active<br>' +
+                '✓ XSS filters enabled<br>' +
+                '✓ Phishing detection running<br>' +
+                '✓ Malware scanning active<br>' +
+                '✓ Network isolation ready<br><br>' +
+                '<span style="color: var(--accent-green);">All attack vectors are being monitored and protected.</span>', false, 'defense');
+        }
+
+        function selectAttackType(type) {
+            quickAction(type);
+        }
+
         function sendAIMessage() {
             const input = document.getElementById('aiInput');
             const message = input.value.trim();
@@ -1876,10 +2679,8 @@
             addAIMessage(message, true);
             input.value = '';
 
-            // Show typing indicator
             addAITyping();
 
-            // Simulate AI response
             setTimeout(() => {
                 removeAITyping();
                 processAIMessage(message);
@@ -1889,151 +2690,341 @@
         function processAIMessage(message) {
             const msg = message.toLowerCase();
             let response = '';
-            let analysis = null;
+            let analysis = { confidence: 90, type: 'general' };
+            let cardType = '';
 
-            if (msg.includes('analyze') || msg.includes('analysis') || msg.includes('run')) {
-                response = `Starting autonomous analysis of current threats...<br><br>
-                    <strong>Analysis Results:</strong><br>
-                    • Detected <span style="color: var(--accent-red);">247 high-severity</span> threats<br>
-                    • <span style="color: var(--accent-yellow);">1,432 medium-severity</span> threats require attention<br>
-                    • <span style="color: var(--accent-green);">8,756 low-severity</span> threats logged<br><br>
-                    <strong>AI Recommendation:</strong> Priority focus on Ransomware variants and Zero-Day exploits. Recommend immediate isolation of affected endpoints.`;
-                analysis = { confidence: 94, type: 'threat' };
-            } 
-            else if (msg.includes('risk') || msg.includes('vulnerability')) {
-                response = `Risk Assessment Report:<br><br>
-                    <strong>Critical Vulnerabilities:</strong><br>
-                    • SQL Injection vectors detected in Web App Firewall<br>
-                    • Port 4444 shows unusual outbound traffic patterns<br>
-                    • Multiple failed login attempts from external IPs<br><br>
-                    <strong>Risk Score:</strong> <span style="color: var(--accent-red);">HIGH (78/100)</span><br>
-                    <strong>Recommended Actions:</strong><br>
-                    1. Enable rate limiting on auth endpoints<br>
-                    2. Block suspicious IP ranges<br>
-                    3. Update WAF rules`;
-                analysis = { confidence: 91, type: 'risk' };
+            // DDoS Handler
+            if (msg.includes('ddos') || msg.includes('dos')) {
+                cardType = 'threat';
+                response = `<i class="fas fa-server" style="color: var(--accent-red);"></i> <strong>DDoS Attack Detected & Handled!</strong><br><br>
+                    <strong>Attack Analysis:</strong>
+                    <ul>
+                        <li>Type: <span style="color: var(--accent-red);">Distributed Denial of Service</span></li>
+                        <li>Target: Main Web Server (192.168.1.100)</li>
+                        <li>Traffic: <span style="color: var(--accent-red);">2.4 Gbps</span></li>
+                        <li>Source IPs: <span style="color: var(--accent-yellow);">1,247 unique IPs</span></li>
+                    </ul>
+                    <strong>AI Mitigation Actions:</strong>
+                    <ul>
+                        <li>✓ Rate limiting activated</li>
+                        <li>✓ Traffic scrubbing engaged</li>
+                        <li>✓ CDN fallback enabled</li>
+                        <li>✓ <span style="color: var(--accent-green);">Attack blocked successfully</span></li>
+                    </ul>
+                    <div class="mitigation-actions">
+                        <button class="mitigation-btn block" onclick="executeBlock('ddos')"><i class="fas fa-ban"></i> Block IPs</button>
+                        <button class="mitigation-btn isolate" onclick="executeIsolate('server')"><i class="fas fa-plug"></i> Isolate Server</button>
+                        <button class="mitigation-btn analyze" onclick="quickAction('deep-ddos')"><i class="fas fa-search"></i> Deep Analysis</button>
+                    </div>`;
+                analysis = { confidence: 97, type: 'ddos' };
             }
-            else if (msg.includes('predict') || msg.includes('trend') || msg.includes('forecast')) {
-                response = `Trend Prediction Analysis:<br><br>
-                    Based on historical data and current patterns:<br><br>
-                    <strong>Next 24 Hours:</strong><br>
-                    • Phishing attempts: <span style="color: var(--accent-yellow);">↑ 15% increase</span><br>
-                    • Ransomware: Stable with new variants expected<br>
-                    • DDoS attacks: <span style="color: var(--accent-green);">↓ 8% decrease</span><br><br>
-                    <strong>AI Model Confidence:</strong> 87%`;
-                analysis = { confidence: 87, type: 'prediction' };
+            // SQL Injection Handler
+            else if (msg.includes('sql') || msg.includes('injection')) {
+                cardType = 'threat';
+                response = `<i class="fas fa-database" style="color: var(--accent-yellow);"></i> <strong>SQL Injection Attack Detected!</strong><br><br>
+                    <strong>Attack Analysis:</strong>
+                    <ul>
+                        <li>Payload: <code>' OR '1'='1</code></li>
+                        <li>Target Endpoint: /api/users/login</li>
+                        <li>Blocked: <span style="color: var(--accent-green);">Yes</span></li>
+                        <li>Database Safe: <span style="color: var(--accent-green);">Verified</span></li>
+                    </ul>
+                    <strong>AI Protection Actions:</strong>
+                    <ul>
+                        <li>✓ Input sanitization applied</li>
+                        <li>✓ WAF rules updated</li>
+                        <li>✓ Query parameters escaped</li>
+                        <li>✓ Source IP logged for forensics</li>
+                    </ul>
+                    <div class="mitigation-actions">
+                        <button class="mitigation-btn block" onclick="executeBlock('sql')"><i class="fas fa-ban"></i> Block Attacker</button>
+                        <button class="mitigation-btn alert" onclick="quickAction('alert-sec')"><i class="fas fa-bell"></i> Alert SecTeam</button>
+                        <button class="mitigation-btn analyze" onclick="quickAction('sql-detail')"><i class="fas fa-search"></i> Forensic Analysis</button>
+                    </div>`;
+                analysis = { confidence: 98, type: 'sql-injection' };
             }
-            else if (msg.includes('block') || msg.includes('ip')) {
-                response = `IP Analysis & Blocking Options:<br><br>
-                    <strong>Suspicious IPs Detected:</strong><br>
-                    • <code>203.45.167.89</code> - Port scanning activity<br>
-                    • Multiple geolocations flagged<br><br>
-                    <strong>AI Recommendation:</strong> Block the following IP ranges?<br>
-                    <button onclick="confirmBlock()" style="background: var(--accent-red); border: none; padding: 8px 16px; border-radius: 6px; color: white; cursor: pointer; margin-top: 8px;">Confirm Block IPs</button>`;
-                analysis = { confidence: 95, type: 'action' };
+            // XSS Handler
+            else if (msg.includes('xss') || msg.includes('cross-site')) {
+                cardType = 'threat';
+                response = `<i class="fas fa-code" style="color: var(--accent-orange);"></i> <strong>XSS Attack Blocked!</strong><br><br>
+                    <strong>Attack Analysis:</strong>
+                    <ul>
+                        <li>Type: Cross-Site Scripting (XSS)</li>
+                        <li>Payload: <code>&lt;script&gt;alert('hack')&lt;/script&gt;</code></li>
+                        <li>Target: Comment section</li>
+                        <li>Status: <span style="color: var(--accent-green);">Neutralized</span></li>
+                    </ul>
+                    <strong>AI Defense:</strong>
+                    <ul>
+                        <li>✓ HTML sanitization applied</li>
+                        <li>✓ Script tags stripped</li>
+                        <li>✓ Content Security Policy enforced</li>
+                        <li>✓ User session secured</li>
+                    </ul>`;
+                analysis = { confidence: 95, type: 'xss' };
             }
-            else if (msg.includes('recommend') || msg.includes('suggest') || msg.includes('help')) {
-                response = `AI Security Recommendations:<br><br>
-                    <strong>Immediate Actions:</strong><br>
-                    1. <i class="fas fa-shield-alt" style="color: var(--accent-red);"></i> Enable enhanced monitoring on DE-P-042 server<br>
-                    2. <i class="fas fa-key" style="color: var(--accent-yellow);"></i> Enforce password policy for 12 weak accounts<br>
-                    3. <i class="fas fa-certificate" style="color: var(--accent-green);"></i> Renew SSL certificate for api.company.com<br><br>
-                    <strong>Long-term Strategy:</strong><br>
-                    • Implement zero-trust architecture<br>
-                    • Deploy AI-powered threat detection<br>
-                    • Regular penetration testing`;
-                analysis = { confidence: 89, type: 'recommendation' };
+            // Phishing Handler
+            else if (msg.includes('phishing') || msg.includes('fish') || msg.includes('email')) {
+                cardType = 'threat';
+                response = `<i class="fas fa-fish" style="color: var(--accent-purple);"></i> <strong>Phishing Campaign Detected!</strong><br><br>
+                    <strong>Campaign Analysis:</strong>
+                    <ul>
+                        <li>Emails Sent: <span style="color: var(--accent-yellow);">1,247</span></li>
+                        <li>Users Targeted: 847 employees</li>
+                        <li>Clicked Link: <span style="color: var(--accent-red);">23 users</span></li>
+                        <li>Credentials Entered: <span style="color: var(--accent-red);">4 users</span></li>
+                    </ul>
+                    <strong>AI Response:</strong>
+                    <ul>
+                        <li>✓ Phishing domain blocked</li>
+                        <li>✓ Affected accounts locked</li>
+                        <li>✓ Passwords reset initiated</li>
+                        <li>✓ Security awareness alert sent</li>
+                    </ul>
+                    <div class="mitigation-actions">
+                        <button class="mitigation-btn block" onclick="executeBlock('phishing')"><i class="fas fa-ban"></i> Block Domain</button>
+                        <button class="mitigation-btn isolate" onclick="quickAction('reset-passwords')"><i class="fas fa-key"></i> Reset All Passwords</button>
+                        <button class="mitigation-btn alert" onclick="quickAction('phishing-report')"><i class="fas fa-flag"></i> Report to Authority</button>
+                    </div>`;
+                analysis = { confidence: 94, type: 'phishing' };
             }
-            else if (msg.includes('report') || msg.includes('summary')) {
-                response = `Security Summary Report:<br><br>
-                    <strong>Current Status:</strong> <span style="color: var(--accent-yellow);">ELEVATED</span><br><br>
-                    • Total Threats: <strong>10,435</strong><br>
-                    • Blocked Today: <strong>1,247</strong><br>
-                    • MTTR: <strong>94.2 hours</strong><br>
-                    • System Uptime: <strong>99.97%</strong><br><br>
-                    <strong>AI Assessment:</strong><br>
-                    Security posture is stable. Continue monitoring high-priority threats.`;
-                analysis = { confidence: 92, type: 'report' };
+            // Malware Handler
+            else if (msg.includes('malware') || msg.includes('virus') || msg.includes('trojan') || msg.includes('ransomware')) {
+                cardType = 'threat';
+                response = `<i class="fas fa-virus" style="color: var(--accent-pink);"></i> <strong>Malware/Ransomware Alert!</strong><br><br>
+                    <strong>Threat Analysis:</strong>
+                    <ul>
+                        <li>Type: <span style="color: var(--accent-red);">CryptoLocker Ransomware</span></li>
+                        <li>Infected File: document.doc.exe</li>
+                        <li>Spread: <span style="color: var(--accent-yellow);">Contained to 1 machine</span></li>
+                        <li>Files Encrypted: 0 (blocked before encryption)</li>
+                    </ul>
+                    <strong>AI Containment:</strong>
+                    <ul>
+                        <li>✓ <span style="color: var(--accent-green);">Machine isolated immediately</span></li>
+                        <li>✓ Ransomware signature added to blocklist</li>
+                        <li>✓ Backup restoration ready</li>
+                        <li>✓ forensic snapshot created</li>
+                    </ul>
+                    <div class="mitigation-actions">
+                        <button class="mitigation-btn block" onclick="executeBlock('malware')"><i class="fas fa-skull"></i> Quarantine Machine</button>
+                        <button class="mitigation-btn isolate" onclick="quickAction('restore-backup')"><i class="fas fa-undo"></i> Restore Backup</button>
+                        <button class="mitigation-btn analyze" onclick="quickAction('malware-analysis')"><i class="fas fa-microscope"></i> Malware Analysis</button>
+                    </div>`;
+                analysis = { confidence: 99, type: 'ransomware' };
             }
-            else if (msg.includes('auto') || msg.includes('autonomous')) {
-                response = `Enabling Autonomous Response Mode...<br><br>
-                    <strong>AI Capabilities Activated:</strong><br>
-                    ✓ Real-time threat monitoring<br>
-                    ✓ Automatic IP blocking<br>
-                    ✓ Anomaly detection<br>
-                    ✓ Predictive analysis<br>
-                    ✓ Incident response automation<br><br>
-                    <span style="color: var(--accent-green);">Autonomous mode is now active. I will monitor and respond to threats automatically.</span>`;
-                analysis = { confidence: 98, type: 'autonomous' };
+            // Brute Force Handler
+            else if (msg.includes('bruteforce') || msg.includes('brute') || msg.includes('force') || msg.includes('password')) {
+                cardType = 'threat';
+                response = `<i class="fas fa-key" style="color: var(--accent-yellow);"></i> <strong>Brute Force Attack Blocked!</strong><br><br>
+                    <strong>Attack Analysis:</strong>
+                    <ul>
+                        <li>Target: admin@company.com</li>
+                        <li>Attempts: <span style="color: var(--accent-red);">4,521</span></li>
+                        <li>Time Window: 15 minutes</li>
+                        <li>Success: <span style="color: var(--accent-green);">None</span></li>
+                    </ul>
+                    <strong>AI Defense:</strong>
+                    <ul>
+                        <li>✓ Account temporarily locked</li>
+                        <li>✓ IP range blocked (203.45.0.0/16)</li>
+                        <li>✓ MFA enforced</li>
+                        <li>✓ Login attempts logged</li>
+                    </ul>
+                    <div class="mitigation-actions">
+                        <button class="mitigation-btn block" onclick="executeBlock('bruteforce')"><i class="fas fa-ban"></i> Permanent Ban</button>
+                        <button class="mitigation-btn alert" onclick="quickAction('notify-admin')"><i class="fas fa-envelope"></i> Notify Admin</button>
+                        <button class="mitigation-btn analyze" onclick="quickAction('check-leaks')"><i class="fas fa-search"></i> Check Password Leaks</button>
+                    </div>`;
+                analysis = { confidence: 96, type: 'bruteforce' };
             }
+            // MITM Handler
+            else if (msg.includes('mitm') || msg.includes('man-in-the-middle') || msg.includes('sniff')) {
+                cardType = 'threat';
+                response = `<i class="fas fa-user-secret" style="color: var(--accent-cyan);"></i> <strong>MITM Attack Detected!</strong><br><br>
+                    <strong>Attack Analysis:</strong>
+                    <ul>
+                        <li>Type: Man-in-the-Middle Attack</li>
+                        <li>Source: Rogue WiFi Access Point</li>
+                        <li>Traffic Intercepted: <span style="color: var(--accent-yellow);">Monitored only</span></li>
+                        <li>Data Exposed: <span style="color: var(--accent-green);">None (SSL pinned)</span></li>
+                    </ul>
+                    <strong>AI Response:</strong>
+                    <ul>
+                        <li>✓ SSL/TLS verification enforced</li>
+                        <li>✓ Certificate pinning activated</li>
+                        <li>✓ VPN tunnel established</li>
+                        <li>✓ Rogue AP location traced</li>
+                    </ul>`;
+                analysis = { confidence: 93, type: 'mitm' };
+            }
+            // Defense activation
+            else if (msg.includes('defense') || msg.includes('protect') || msg.includes('shield')) {
+                activateDefense();
+                return;
+            }
+            // Analyze
+            else if (msg.includes('analyze') || msg.includes('analysis') || msg.includes('scan')) {
+                response = `<i class="fas fa-search" style="color: var(--accent-cyan);"></i> <strong>AI Threat Analysis Report</strong><br><br>
+                    <strong>Overall Security Status:</strong> <span style="color: var(--accent-yellow);">ELEVATED</span><br><br>
+                    <strong>Active Threats Detected:</strong>
+                    <ul>
+                        <li>DDoS Attempts: <span style="color: var(--accent-red);">89</span></li>
+                        <li>SQL Injections: <span style="color: var(--accent-yellow);">156</span></li>
+                        <li>XSS Attempts: <span style="color: var(--accent-orange);">234</span></li>
+                        <li>Phishing: <span style="color: var(--accent-purple);">567</span></li>
+                        <li>Malware: <span style="color: var(--accent-pink);">78</span></li>
+                        <li>Brute Force: <span style="color: var(--accent-yellow);">445</span></li>
+                    </ul>
+                    <strong>AI Recommendation:</strong><br>
+                    <span style="color: var(--accent-green);">✓ All threats are being actively monitored and blocked.</span><br>
+                    ✓ 12,400 attacks blocked in the last 24 hours<br>
+                    ✓ No successful breaches detected<br><br>
+                    <div class="mitigation-actions">
+                        <button class="mitigation-btn analyze" onclick="quickAction('full-report')"><i class="fas fa-file-alt"></i> Full Report</button>
+                        <button class="mitigation-btn alert" onclick="quickAction('schedule-scan')"><i class="fas fa-calendar"></i> Schedule Deep Scan</button>
+                    </div>`;
+                analysis = { confidence: 92, type: 'analysis' };
+            }
+            // Block all
+            else if (msg.includes('block') && msg.includes('all')) {
+                response = `<i class="fas fa-shield-alt" style="color: var(--accent-red);"></i> <strong>Executing Global Block!</strong><br><br>
+                    Blocking all suspicious traffic...<br>
+                    <ul>
+                        <li>✓ Rate limiting: MAX_STRICT</li>
+                        <li>✓ Geo-blocking: High-risk regions</li>
+                        <li>✓ Known malicious IPs: Blocked</li>
+                        <li>✓ Tor exit nodes: Blocked</li>
+                        <li>✓ VPN services: Restricted</li>
+                    </ul>
+                    <span style="color: var(--accent-green);">Global defense activated successfully!</span>`;
+                analysis = { confidence: 100, type: 'defense' };
+                cardType = 'defense';
+            }
+            // Isolate
+            else if (msg.includes('isolate') || msg.includes('quarantine')) {
+                response = `<i class="fas fa-plug" style="color: var(--accent-yellow);"></i> <strong>Network Isolation Initiated</strong><br><br>
+                    Isolating affected systems...<br>
+                    <ul>
+                        <li>✓ VLAN 999 (Quarantine) created</li>
+                        <li>✓ Affected endpoints isolated</li>
+                        <li>✓ Network segmentation active</li>
+                        <li>✓ Traffic monitoring enabled</li>
+                    </ul>
+                    <span style="color: var(--accent-yellow);">Warning: 3 machines isolated. Run forensics before restoring.</span>`;
+                analysis = { confidence: 95, type: 'defense' };
+                cardType = 'defense';
+            }
+            // General/Unknown
             else {
-                response = `Understood. I'm analyzing your request...<br><br>
-                    Current threat landscape overview:<br><br>
-                    • <span style="color: var(--accent-red);">247 active high-severity</span> threats<br>
-                    • Primary attack vectors: Ransomware, SQL Injection<br>
-                    • Most targeted: Web Application Firewall, Auth systems<br><br>
-                    Ask me about: <strong>analyze</strong>, <strong>risk</strong>, <strong>predict</strong>, <strong>recommend</strong>, or <strong>report</strong>`;
+                response = `<i class="fas fa-robot" style="color: var(--accent-cyan);"></i> <strong>CyberAI Defense System</strong><br><br>
+                    Saya adalah AI yang dirancang untuk menangani semua jenis serangan cyber. Saya dapat membantu Anda dengan:<br><br>
+                    <strong>Serangan yang dapat saya tangani:</strong>
+                    <ul>
+                        <li>🛡️ <strong>DDoS/DoS</strong> - Distributed Denial of Service</li>
+                        <li>🛡️ <strong>SQL Injection</strong> - Database attacks</li>
+                        <li>🛡️ <strong>XSS</strong> - Cross-Site Scripting</li>
+                        <li>🛡️ <strong>Phishing</strong> - Social engineering</li>
+                        <li>🛡️ <strong>Malware/Ransomware</strong> - Malware attacks</li>
+                        <li>🛡️ <strong>Brute Force</strong> - Password attacks</li>
+                        <li>🛡️ <strong>MITM</strong> - Man-in-the-Middle</li>
+                    </ul>
+                    <strong>Commands:</strong><br>
+                    Ketik nama serangan untuk analyze dan mitigasi.<br>
+                    <code>defense</code> - Aktifkan semua pertahanan<br>
+                    <code>block all</code> - Block semua traffic mencurigakan<br>
+                    <code>isolate</code> - Isolasi sistem yang terinfeksi<br>
+                    <code>analyze</code> - Lihat analisis lengkap`;
                 analysis = { confidence: 75, type: 'general' };
             }
 
-            addAIMessage(response);
+            addAIMessage(response, false, cardType);
 
-            // Add analysis card if applicable
-            if (analysis) {
-                setTimeout(() => {
-                    const body = document.getElementById('aiBody');
-                    const card = document.createElement('div');
-                    card.className = 'ai-message ai';
-                    card.innerHTML = `
-                        <div class="ai-analysis-card">
-                            <div class="ai-analysis-title">
-                                <i class="fas fa-chart-bar"></i> Analysis Quality
-                            </div>
-                            <div class="ai-analysis-content">
-                                Analysis Type: <strong>${analysis.type.toUpperCase()}</strong>
-                            </div>
-                            <div class="ai-confidence">
-                                <span style="font-size: 11px; color: var(--text-muted);">Confidence:</span>
-                                <div class="confidence-bar">
-                                    <div class="confidence-fill" style="width: ${analysis.confidence}%"></div>
-                                </div>
-                                <span class="confidence-text">${analysis.confidence}%</span>
-                            </div>
+            // Add analysis card
+            setTimeout(() => {
+                const body = document.getElementById('aiBody');
+                const card = document.createElement('div');
+                card.className = `ai-message ai`;
+                card.innerHTML = `
+                    <div class="ai-analysis-card ${cardType}">
+                        <div class="ai-analysis-title">
+                            <i class="fas fa-brain"></i> AI Analysis Result
                         </div>
-                    `;
-                    body.appendChild(card);
-                    body.scrollTop = body.scrollHeight;
-                }, 500);
-            }
+                        <div class="ai-analysis-content">
+                            <strong>Type:</strong> ${analysis.type.toUpperCase().replace('-', ' ')}<br>
+                            <strong>Threat Level:</strong> ${getThreatLevel(analysis.confidence)}
+                        </div>
+                        <div class="ai-confidence">
+                            <span style="font-size: 11px; color: var(--text-muted);">AI Confidence:</span>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${analysis.confidence}%"></div>
+                            </div>
+                            <span class="confidence-text">${analysis.confidence}%</span>
+                        </div>
+                    </div>
+                `;
+                body.appendChild(card);
+                body.scrollTop = body.scrollHeight;
+            }, 500);
+        }
+
+        function getThreatLevel(confidence) {
+            if (confidence >= 95) return '<span style="color: var(--accent-red);">CRITICAL</span>';
+            if (confidence >= 85) return '<span style="color: var(--accent-orange);">HIGH</span>';
+            if (confidence >= 70) return '<span style="color: var(--accent-yellow);">MEDIUM</span>';
+            return '<span style="color: var(--accent-green);">LOW</span>';
+        }
+
+        function executeBlock(type) {
+            addAIMessage(`Executing ${type.toUpperCase()} block protocol...`, true);
+            setTimeout(() => {
+                addAIMessage(`<span style="color: var(--accent-green);"><i class="fas fa-check-circle"></i> ${type.toUpperCase()} block executed successfully! All malicious sources have been blocked.</span>`);
+            }, 1500);
+        }
+
+        function executeIsolate(target) {
+            addAIMessage(`Isolating ${target} from network...`, true);
+            setTimeout(() => {
+                addAIMessage(`<span style="color: var(--accent-yellow);"><i class="fas fa-plug"></i> ${target} has been isolated in quarantine VLAN. No network access allowed.</span>`);
+            }, 1500);
         }
 
         function runAIAnalysis() {
             toggleAIPanel();
             setTimeout(() => {
                 const input = document.getElementById('aiInput');
-                input.value = 'run full analysis';
+                input.value = 'analyze';
                 sendAIMessage();
             }, 300);
         }
 
-        function confirmBlock() {
-            addAIMessage('Blocking suspicious IPs...', true);
-            setTimeout(() => {
-                addAIMessage('<span style="color: var(--accent-green);"><i class="fas fa-check-circle"></i> Successfully blocked IPs: 203.45.167.89 and related range. WAF rules updated.</span>');
-            }, 1000);
-        }
-
         // Autonomous AI monitoring
         function startAutonomousMonitoring() {
-            setInterval(() => {
-                const threats = document.querySelectorAll('.threat-item[data-severity="high"]');
-                const highThreats = threats.length;
-                
-                if (highThreats > 0) {
-                    // Simulate autonomous response
-                    console.log(`AI Monitor: ${highThreats} high threats detected - Analysis running...`);
+            // Show defense indicator after 5 seconds
+            setTimeout(() => {
+                if (!defenseActive) {
+                    const indicator = document.getElementById('defenseIndicator');
+                    if (indicator) {
+                        indicator.classList.add('show');
+                    }
                 }
-            }, 30000); // Check every 30 seconds
+            }, 5000);
+
+            // Update defense status periodically
+            setInterval(() => {
+                const statuses = [
+                    'Monitoring all attack vectors...',
+                    'Analyzing network traffic patterns...',
+                    'Scanning for vulnerabilities...',
+                    'AI threat detection active...',
+                    'Defense systems online...',
+                    'Monitoring 12,400+ threat signatures...'
+                ];
+                const status = document.getElementById('defenseStatus');
+                if (status && defenseActive) {
+                    status.textContent = statuses[Math.floor(Math.random() * statuses.length)];
+                }
+            }, 8000);
         }
 
         // Start autonomous monitoring
