@@ -27,6 +27,332 @@
             --glow-red: 0 0 20px rgba(255, 51, 102, 0.3);
         }
 
+        /* AI Panel Styles */
+        .ai-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            height: 550px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            display: none;
+            flex-direction: column;
+            z-index: 2000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), var(--glow-cyan);
+            overflow: hidden;
+        }
+
+        .ai-panel.active {
+            display: flex;
+        }
+
+        .ai-header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(0, 245, 255, 0.1));
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            animation: aiPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes aiPulse {
+            0%, 100% { box-shadow: 0 0 10px var(--accent-purple); }
+            50% { box-shadow: 0 0 25px var(--accent-purple), 0 0 40px var(--accent-cyan); }
+        }
+
+        .ai-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .ai-status {
+            font-size: 11px;
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .ai-status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        .ai-close {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 51, 102, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: var(--accent-red);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .ai-close:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .ai-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ai-message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ai-message.ai {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .ai-message.user {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai-message .sender {
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            opacity: 0.7;
+        }
+
+        .ai-typing {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .ai-typing span {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .ai-typing span:nth-child(1) { animation-delay: -0.32s; }
+        .ai-typing span:nth-child(2) { animation-delay: -0.16s; }
+        .ai-typing span:nth-child(3) { animation-delay: 0; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .ai-footer {
+            padding: 12px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .ai-input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 245, 255, 0.2);
+        }
+
+        .ai-send {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .ai-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+
+        .ai-trigger {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1999;
+            box-shadow: 0 5px 30px rgba(168, 85, 247, 0.4);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-trigger:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.6);
+        }
+
+        .ai-trigger.active {
+            display: none;
+        }
+
+        .ai-trigger::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            animation: triggerPulse 2s infinite;
+            z-index: -1;
+        }
+
+        @keyframes triggerPulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .ai-capabilities {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .ai-capability {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            padding: 6px 10px;
+            background: rgba(0, 245, 255, 0.1);
+            border-radius: 6px;
+            color: var(--accent-cyan);
+        }
+
+        .ai-capability i {
+            font-size: 10px;
+        }
+
+        /* AI Analysis Cards */
+        .ai-analysis-card {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(0, 245, 255, 0.05));
+            border: 1px solid var(--accent-purple);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .ai-analysis-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--accent-purple);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ai-analysis-content {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .ai-confidence {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .confidence-text {
+            font-size: 11px;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -1267,6 +1593,18 @@
                         </div>
                         <span class="action-label">Gen Report</span>
                     </button>
+                    <button class="action-btn" onclick="toggleAIPanel()">
+                        <div class="action-icon" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(0, 245, 255, 0.2));">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <span class="action-label">AI Analyst</span>
+                    </button>
+                    <button class="action-btn" onclick="runAIAnalysis()">
+                        <div class="action-icon" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 245, 255, 0.2));">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <span class="action-label">Auto Analyze</span>
+                    </button>
                 </div>
 
                 <h3 class="section-title" style="margin-top: 30px;">RECENT ACTIVITY</h3>
@@ -1396,6 +1734,51 @@
         </div>
     </main>
 
+    <!-- AI Assistant Panel -->
+    <button class="ai-trigger" id="aiTrigger" onclick="toggleAIPanel()">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <div class="ai-panel" id="aiPanel">
+        <div class="ai-header">
+            <div class="ai-title">
+                <div class="ai-avatar">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <div>
+                    <div class="ai-name">CyberAI Analyst</div>
+                    <div class="ai-status">
+                        <div class="ai-status-dot"></div>
+                        <span>Autonomous Mode</span>
+                    </div>
+                </div>
+            </div>
+            <button class="ai-close" onclick="toggleAIPanel()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="ai-body" id="aiBody">
+            <div class="ai-message ai">
+                <div class="sender">CyberAI</div>
+                <div>Hello! I'm your autonomous AI security analyst. I can help you with:</div>
+                <div class="ai-capabilities">
+                    <div class="ai-capability"><i class="fas fa-search"></i> Threat Analysis</div>
+                    <div class="ai-capability"><i class="fas fa-brain"></i> Risk Assessment</div>
+                    <div class="ai-capability"><i class="fas fa-lightbulb"></i> Recommendations</div>
+                    <div class="ai-capability"><i class="fas fa-chart-line"></i> Trend Prediction</div>
+                    <div class="ai-capability"><i class="fas fa-bolt"></i> Auto Response</div>
+                    <div class="ai-capability"><i class="fas fa-search-plus"></i> Deep Analysis</div>
+                </div>
+            </div>
+        </div>
+        <div class="ai-footer">
+            <input type="text" class="ai-input" id="aiInput" placeholder="Ask me about security threats..." onkeypress="handleAIEnter(event)">
+            <button class="ai-send" onclick="sendAIMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
     <script>
         function updateTime() {
             const now = new Date();
@@ -1437,6 +1820,224 @@
                 item.style.transform = 'translateX(0)';
             }, index * 100);
         });
+
+        // AI Panel Functions
+        let aiPanelOpen = false;
+
+        function toggleAIPanel() {
+            aiPanelOpen = !aiPanelOpen;
+            const panel = document.getElementById('aiPanel');
+            const trigger = document.getElementById('aiTrigger');
+            
+            if (aiPanelOpen) {
+                panel.classList.add('active');
+                trigger.classList.add('active');
+            } else {
+                panel.classList.remove('active');
+                trigger.classList.remove('active');
+            }
+        }
+
+        function handleAIEnter(event) {
+            if (event.key === 'Enter') {
+                sendAIMessage();
+            }
+        }
+
+        function addAIMessage(content, isUser = false) {
+            const body = document.getElementById('aiBody');
+            const message = document.createElement('div');
+            message.className = `ai-message ${isUser ? 'user' : 'ai'}`;
+            message.innerHTML = `<div class="sender">${isUser ? 'You' : 'CyberAI'}</div><div>${content}</div>`;
+            body.appendChild(message);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function addAITyping() {
+            const body = document.getElementById('aiBody');
+            const typing = document.createElement('div');
+            typing.className = 'ai-typing';
+            typing.id = 'aiTyping';
+            typing.innerHTML = '<span></span><span></span><span></span>';
+            body.appendChild(typing);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function removeAITyping() {
+            const typing = document.getElementById('aiTyping');
+            if (typing) typing.remove();
+        }
+
+        function sendAIMessage() {
+            const input = document.getElementById('aiInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addAIMessage(message, true);
+            input.value = '';
+
+            // Show typing indicator
+            addAITyping();
+
+            // Simulate AI response
+            setTimeout(() => {
+                removeAITyping();
+                processAIMessage(message);
+            }, 1500);
+        }
+
+        function processAIMessage(message) {
+            const msg = message.toLowerCase();
+            let response = '';
+            let analysis = null;
+
+            if (msg.includes('analyze') || msg.includes('analysis') || msg.includes('run')) {
+                response = `Starting autonomous analysis of current threats...<br><br>
+                    <strong>Analysis Results:</strong><br>
+                    • Detected <span style="color: var(--accent-red);">247 high-severity</span> threats<br>
+                    • <span style="color: var(--accent-yellow);">1,432 medium-severity</span> threats require attention<br>
+                    • <span style="color: var(--accent-green);">8,756 low-severity</span> threats logged<br><br>
+                    <strong>AI Recommendation:</strong> Priority focus on Ransomware variants and Zero-Day exploits. Recommend immediate isolation of affected endpoints.`;
+                analysis = { confidence: 94, type: 'threat' };
+            } 
+            else if (msg.includes('risk') || msg.includes('vulnerability')) {
+                response = `Risk Assessment Report:<br><br>
+                    <strong>Critical Vulnerabilities:</strong><br>
+                    • SQL Injection vectors detected in Web App Firewall<br>
+                    • Port 4444 shows unusual outbound traffic patterns<br>
+                    • Multiple failed login attempts from external IPs<br><br>
+                    <strong>Risk Score:</strong> <span style="color: var(--accent-red);">HIGH (78/100)</span><br>
+                    <strong>Recommended Actions:</strong><br>
+                    1. Enable rate limiting on auth endpoints<br>
+                    2. Block suspicious IP ranges<br>
+                    3. Update WAF rules`;
+                analysis = { confidence: 91, type: 'risk' };
+            }
+            else if (msg.includes('predict') || msg.includes('trend') || msg.includes('forecast')) {
+                response = `Trend Prediction Analysis:<br><br>
+                    Based on historical data and current patterns:<br><br>
+                    <strong>Next 24 Hours:</strong><br>
+                    • Phishing attempts: <span style="color: var(--accent-yellow);">↑ 15% increase</span><br>
+                    • Ransomware: Stable with new variants expected<br>
+                    • DDoS attacks: <span style="color: var(--accent-green);">↓ 8% decrease</span><br><br>
+                    <strong>AI Model Confidence:</strong> 87%`;
+                analysis = { confidence: 87, type: 'prediction' };
+            }
+            else if (msg.includes('block') || msg.includes('ip')) {
+                response = `IP Analysis & Blocking Options:<br><br>
+                    <strong>Suspicious IPs Detected:</strong><br>
+                    • <code>203.45.167.89</code> - Port scanning activity<br>
+                    • Multiple geolocations flagged<br><br>
+                    <strong>AI Recommendation:</strong> Block the following IP ranges?<br>
+                    <button onclick="confirmBlock()" style="background: var(--accent-red); border: none; padding: 8px 16px; border-radius: 6px; color: white; cursor: pointer; margin-top: 8px;">Confirm Block IPs</button>`;
+                analysis = { confidence: 95, type: 'action' };
+            }
+            else if (msg.includes('recommend') || msg.includes('suggest') || msg.includes('help')) {
+                response = `AI Security Recommendations:<br><br>
+                    <strong>Immediate Actions:</strong><br>
+                    1. <i class="fas fa-shield-alt" style="color: var(--accent-red);"></i> Enable enhanced monitoring on DE-P-042 server<br>
+                    2. <i class="fas fa-key" style="color: var(--accent-yellow);"></i> Enforce password policy for 12 weak accounts<br>
+                    3. <i class="fas fa-certificate" style="color: var(--accent-green);"></i> Renew SSL certificate for api.company.com<br><br>
+                    <strong>Long-term Strategy:</strong><br>
+                    • Implement zero-trust architecture<br>
+                    • Deploy AI-powered threat detection<br>
+                    • Regular penetration testing`;
+                analysis = { confidence: 89, type: 'recommendation' };
+            }
+            else if (msg.includes('report') || msg.includes('summary')) {
+                response = `Security Summary Report:<br><br>
+                    <strong>Current Status:</strong> <span style="color: var(--accent-yellow);">ELEVATED</span><br><br>
+                    • Total Threats: <strong>10,435</strong><br>
+                    • Blocked Today: <strong>1,247</strong><br>
+                    • MTTR: <strong>94.2 hours</strong><br>
+                    • System Uptime: <strong>99.97%</strong><br><br>
+                    <strong>AI Assessment:</strong><br>
+                    Security posture is stable. Continue monitoring high-priority threats.`;
+                analysis = { confidence: 92, type: 'report' };
+            }
+            else if (msg.includes('auto') || msg.includes('autonomous')) {
+                response = `Enabling Autonomous Response Mode...<br><br>
+                    <strong>AI Capabilities Activated:</strong><br>
+                    ✓ Real-time threat monitoring<br>
+                    ✓ Automatic IP blocking<br>
+                    ✓ Anomaly detection<br>
+                    ✓ Predictive analysis<br>
+                    ✓ Incident response automation<br><br>
+                    <span style="color: var(--accent-green);">Autonomous mode is now active. I will monitor and respond to threats automatically.</span>`;
+                analysis = { confidence: 98, type: 'autonomous' };
+            }
+            else {
+                response = `Understood. I'm analyzing your request...<br><br>
+                    Current threat landscape overview:<br><br>
+                    • <span style="color: var(--accent-red);">247 active high-severity</span> threats<br>
+                    • Primary attack vectors: Ransomware, SQL Injection<br>
+                    • Most targeted: Web Application Firewall, Auth systems<br><br>
+                    Ask me about: <strong>analyze</strong>, <strong>risk</strong>, <strong>predict</strong>, <strong>recommend</strong>, or <strong>report</strong>`;
+                analysis = { confidence: 75, type: 'general' };
+            }
+
+            addAIMessage(response);
+
+            // Add analysis card if applicable
+            if (analysis) {
+                setTimeout(() => {
+                    const body = document.getElementById('aiBody');
+                    const card = document.createElement('div');
+                    card.className = 'ai-message ai';
+                    card.innerHTML = `
+                        <div class="ai-analysis-card">
+                            <div class="ai-analysis-title">
+                                <i class="fas fa-chart-bar"></i> Analysis Quality
+                            </div>
+                            <div class="ai-analysis-content">
+                                Analysis Type: <strong>${analysis.type.toUpperCase()}</strong>
+                            </div>
+                            <div class="ai-confidence">
+                                <span style="font-size: 11px; color: var(--text-muted);">Confidence:</span>
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" style="width: ${analysis.confidence}%"></div>
+                                </div>
+                                <span class="confidence-text">${analysis.confidence}%</span>
+                            </div>
+                        </div>
+                    `;
+                    body.appendChild(card);
+                    body.scrollTop = body.scrollHeight;
+                }, 500);
+            }
+        }
+
+        function runAIAnalysis() {
+            toggleAIPanel();
+            setTimeout(() => {
+                const input = document.getElementById('aiInput');
+                input.value = 'run full analysis';
+                sendAIMessage();
+            }, 300);
+        }
+
+        function confirmBlock() {
+            addAIMessage('Blocking suspicious IPs...', true);
+            setTimeout(() => {
+                addAIMessage('<span style="color: var(--accent-green);"><i class="fas fa-check-circle"></i> Successfully blocked IPs: 203.45.167.89 and related range. WAF rules updated.</span>');
+            }, 1000);
+        }
+
+        // Autonomous AI monitoring
+        function startAutonomousMonitoring() {
+            setInterval(() => {
+                const threats = document.querySelectorAll('.threat-item[data-severity="high"]');
+                const highThreats = threats.length;
+                
+                if (highThreats > 0) {
+                    // Simulate autonomous response
+                    console.log(`AI Monitor: ${highThreats} high threats detected - Analysis running...`);
+                }
+            }, 30000); // Check every 30 seconds
+        }
+
+        // Start autonomous monitoring
+        startAutonomousMonitoring();
     </script>
 </body>
 </html>
